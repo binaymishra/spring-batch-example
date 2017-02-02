@@ -4,8 +4,8 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * @author Binay Mishra
@@ -14,11 +14,11 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class Application {
 
 	public static void main(String[] args) throws Throwable{
-		AbstractApplicationContext context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
+		AbstractApplicationContext context = new AnnotationConfigApplicationContext(BatchConfiguration.class);
 		try {
 			
 			JobLauncher jobLauncher = (JobLauncher) context.getBean("jobLauncher");
-			Job job = (Job) context.getBean("insertIntoDbFromCSV");
+			Job job = (Job) context.getBean("importPurchaseOrderJob");
 			JobExecution jobExecution = jobLauncher.run(job, new JobParameters());
 			
 			if(jobExecution.isRunning()){
